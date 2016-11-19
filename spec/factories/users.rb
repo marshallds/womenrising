@@ -18,6 +18,14 @@ FactoryGirl.define do
     top_3_interests {["Arts", "Music", "Crafting", "Home improvement / Decorating", "Being a mom", "Dogs", "Cats", "Watching Sports", "Outdoors / Hiking", "Exercise", "Biking", "Yoga", "Running", "Beer","Wine","Traveling"," Local events",    "Reading", "Photography", "Movies","Cooking / Eating / Being a foodie" ,"Social issues / volunteering","Video Games"].sample(3)}
     live_in_detroit {%w(true false).sample}
     is_participating_next_month {[true, false].sample}
-    is_participating_this_month {true}
+    is_participating_this_month { true }
+    waitlist { [true, false].sample }
+
+    trait :groupable do
+      primary_industry { ['Business', 'Technology', 'Startup'].sample }
+      is_participating_this_month true
+      waitlist false
+      live_in_detroit true
+    end
   end
 end
