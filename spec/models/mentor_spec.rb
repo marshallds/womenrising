@@ -1,15 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe Mentor, :type => :model do
+RSpec.describe Mentor, focus: true do
  	it{should belong_to(:mentee).class_name('User').with_foreign_key('mentee_id')}
  	it{should belong_to(:mentoring).class_name('User').with_foreign_key('mentor_id')}
- 	before{100.times{FactoryGirl.create(:user)}}
 
-  it "can get users" do
-    expect(FactoryGirl.create(:user)).to be_valid
+  subject { FactoryGirl.build(:mentor) }
+
+  it "is valid with valid attributes" do
+    expect(subject).to be_valid
   end
 
- 	context "#choose_mentor" do
+  it "is not valid without a question" do
+    subject.question = ''
+    expect(subject).to_not be_valid
+  end
+
+  context "#choose_mentor" do
+   	before do
+      100.times{FactoryGirl.create(:user)}
+    end
 
  		it "Should choose a valid person to mentor" do
  			create = User.create!(email: "hellowerqerwred2@gmail.com", password: "Somethingwierd12",password_confirmation: "Somethingwierd12", first_name: "Hello",last_name: "world", mentor: true, primary_industry: "Technology", stage_of_career: 5, mentor_industry: "Technology", peer_industry: ["Business", "Technology", "Startup"].sample, current_goal: ["Rising the ranks / breaking the glass ceiling","Switching industries","Finding work/life balance"].sample,top_3_interests: ["Arts", "Music", "Crafting", "Home improvement / Decorating", "Being a mom", "Dogs", "Cats", "Watching Sports", "Outdoors / Hiking", "Exercise", "Biking", "Yoga", "Running", "Beer","Wine","Traveling"," Local events",    "Reading", "Photography", "Movies","Cooking / Eating / Being a foodie" ,"Social issues / volunteering","Video Games"].sample(3), live_in_detroit: %w(true false).sample, is_participating_this_month: true,
@@ -48,5 +57,4 @@ RSpec.describe Mentor, :type => :model do
  			expect(Mentor.create(mentee_id: mentee.id, question: "Hello")).to_not be_valid
  		end
  	end
-
 end

@@ -11,17 +11,14 @@
 #
 
 class Mentor < ActiveRecord::Base
-  validate  :is_question_empty, :not_on_waitlist, :have_available_mentors, :is_question
+  validates_presence_of :question, message: 'In order to request a mentor you must not leave the question box blank.'
+  validate :not_on_waitlist, :have_available_mentors, :is_question
 
   belongs_to :mentee, class_name: "User", foreign_key: 'mentee_id'
   belongs_to :mentoring, class_name: "User", foreign_key: 'mentor_id'
 
-  def is_question_empty
-    errors.add("You must submit a question" ,'In order to request a mentor you must not leave the question box blank.') if self.question.empty?
-  end
-
   def is_question
-    errors.add("In order to receive a mentor match, you must submit a specific question! What is your question? " ,' Some examples from last round include: "How do I ask for a raise?", "How can I make time for both my significant other while being so busy?" or "How can I get my first job as a developer?"') if self.question[-1] != "?"
+    errors.add("In order to receive a mentor match, you must submit a specific question! What is your question? " , 'Some examples from last round include: "How do I ask for a raise?", "How can I make time for both my significant other while being so busy?" or "How can I get my first job as a developer?"') if self.question[-1] != "?"
   end
 
   def not_on_waitlist
